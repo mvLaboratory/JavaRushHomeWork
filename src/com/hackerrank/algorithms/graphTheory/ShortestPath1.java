@@ -16,6 +16,7 @@ public class ShortestPath1 {
         int T = sc.nextInt();
         for(int i = 0; i < T; i++) {
             graph();
+            wayMap.clear();
             System.out.println();
         }
     }
@@ -58,7 +59,8 @@ public class ShortestPath1 {
             buildTrack(startPoint, i, new ArrayList<Integer>(), 1, 5);
             if (getMinTrackLength() == 0)
                 buildTrack(startPoint, i, new ArrayList<Integer>(), 1, -1);
-            printPointResult(i);
+
+            printPointResult();
         }
     }
 
@@ -92,20 +94,23 @@ public class ShortestPath1 {
             }
         }
 
-        if (level > maxLvl) return;
+        if (level > maxLvl)
+            return;
 
         for (int point : path) {
-            int curTrackSize = tempTrack.size();
-            int minTrackLength = getMinTrackLength();
-
-            if (minTrackLength > 0 && curTrackSize >= (minTrackLength - 1))
-                return;
-
             curTrack.clear();
             curTrack.addAll(tempTrack);
 
-            if (curTrack.contains(point)) continue;
-            if (point == startPoint) continue;
+            int curTrackSize = curTrack.size();
+            int minTrackLength = getMinTrackLength();
+
+            if (minTrackLength > 0 && curTrackSize >= (minTrackLength - 2))
+                return;
+
+            if (curTrack.contains(point))
+                continue;
+            if (point == startPoint)
+                continue;
 
             if (point != destinationPoint)
             {
@@ -124,7 +129,7 @@ public class ShortestPath1 {
         }
     }
 
-    public static void printPointResult(int point) {
+    public static void printPointResult() {
         if (tracks.size() == 0) return;
 
         int trackPointsCounter = -1;
@@ -152,14 +157,12 @@ public class ShortestPath1 {
     }
 
     public static boolean isGoalReachable(int destination) {
-        for (Map.Entry<Integer, ArrayList<Integer>> connections : wayMap.entrySet()) {
-            if (connections.getValue().contains(destination)) return true;
-        }
-        return false;
+        return wayMap.containsKey(destination);
     }
 
     public static void fillPreDestinationPoints(int point) {
         preDestination.clear();
+//        preDestination.addAll(wayMap.get(point));
         for (Map.Entry<Integer, ArrayList<Integer>> connections : wayMap.entrySet()) {
             if (connections.getValue().contains(point))
                 preDestination.add(connections.getKey());
