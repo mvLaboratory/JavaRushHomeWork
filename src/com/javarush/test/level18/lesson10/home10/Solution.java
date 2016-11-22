@@ -11,8 +11,11 @@ package com.javarush.test.level18.lesson10.home10;
 Закрыть потоки. Не использовать try-with-resources
 */
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 public class Solution {
     public static void main(String[] args) {
-
+        BufferedReader filenameReader = new BufferedReader(new InputStreamReader(System.in));
     }
 }
