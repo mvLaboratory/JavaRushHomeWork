@@ -11,11 +11,45 @@ package com.javarush.test.level18.lesson10.home10;
 Закрыть потоки. Не использовать try-with-resources
 */
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Solution {
     public static void main(String[] args) {
-        BufferedReader filenameReader = new BufferedReader(new InputStreamReader(System.in));
+        ArrayList<String> nameList = new ArrayList<>();
+        BufferedReader fileNameReader = new BufferedReader(new InputStreamReader(System.in));
+        String filename = "";
+
+        try {
+            while(true) {
+                filename = fileNameReader.readLine();
+
+                if (filename.equals("end"))
+                    break;
+
+                nameList.add(filename);
+            }
+        }
+        catch (IOException e) {
+
+        }
+
+        Collections.sort(nameList, new filePartComparator());
+        nameList.forEach(System.out::println);
+
+        //BufferedWriter writer = new BufferedWriter(new FileWriter("Lion.avi"))
+
+        for (String fileName : nameList) {
+
+        }
+
+        try
+        {
+            fileNameReader.close();
+        }
+        catch (IOException e) {
+
+        }
     }
 }
