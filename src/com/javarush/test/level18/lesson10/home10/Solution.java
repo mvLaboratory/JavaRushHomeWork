@@ -38,9 +38,44 @@ public class Solution {
         Collections.sort(nameList, new filePartComparator());
         nameList.forEach(System.out::println);
 
-        //BufferedWriter writer = new BufferedWriter(new FileWriter("Lion.avi"))
+        String outputFileName = filename.substring(0, filename.indexOf(".part"));
+
+        FileWriter fileWriter;
+        try {
+            fileWriter = new FileWriter(outputFileName);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        BufferedWriter writer = new BufferedWriter(fileWriter);
 
         for (String fileName : nameList) {
+            FileReader filePart;
+            try {
+                filePart = new FileReader(fileName);
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            BufferedReader fileReader = new BufferedReader(filePart);
+
+            //fileReader.
+
+            try {
+                fileReader.close();
+            }
+            catch (IOException e) {
+
+            }
+        }
+
+        try {
+            writer.close();
+        }
+        catch (IOException e) {
 
         }
 
