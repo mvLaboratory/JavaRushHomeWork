@@ -35,9 +35,21 @@ public class Solution {
 
         }
 
-        Collections.sort(nameList, new filePartComparator());
-        nameList.forEach(System.out::println);
+        try
+        {
+            fileNameReader.close();
+        }
+        catch (IOException e) {
 
+        }
+
+        if (nameList.size() == 0) {
+            return;
+        }
+
+        Collections.sort(nameList, new filePartComparator());
+
+        filename = nameList.get(0);
         String outputFileName = filename.substring(0, filename.indexOf(".part"));
 
         FileWriter fileWriter;
@@ -62,10 +74,29 @@ public class Solution {
 
             BufferedReader fileReader = new BufferedReader(filePart);
 
-            //fileReader.
+            try
+            {
+                while (fileReader.ready())
+                {
+                    //System.out.println(fileReader.readLine());
+                    writer.write(fileReader.read());
+                    //writer.newLine();
+
+                }
+            }
+            catch (IOException e) {
+
+            }
 
             try {
                 fileReader.close();
+            }
+            catch (IOException e) {
+
+            }
+
+            try {
+                filePart.close();
             }
             catch (IOException e) {
 
@@ -79,9 +110,8 @@ public class Solution {
 
         }
 
-        try
-        {
-            fileNameReader.close();
+        try {
+            fileWriter.close();
         }
         catch (IOException e) {
 
