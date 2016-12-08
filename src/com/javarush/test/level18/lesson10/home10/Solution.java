@@ -12,109 +12,32 @@ package com.javarush.test.level18.lesson10.home10;
 */
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 
 public class Solution {
-    public static void main(String[] args) {
-        ArrayList<String> nameList = new ArrayList<>();
-        BufferedReader fileNameReader = new BufferedReader(new InputStreamReader(System.in));
-        String filename = "";
+    public static void main(String[] args) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String name;
+        Set<File> fileset = new TreeSet<>();
+        while (!(name = reader.readLine()).equals("end")) {
+            File file = new File(name);
+            fileset.add(file);
+        }
+        reader.close();
 
-        try {
-            while(true) {
-                filename = fileNameReader.readLine();
-
-                if (filename.equals("end"))
-                    break;
-
-                nameList.add(filename);
+        Iterator<File> itr = fileset.iterator();
+        String folder = itr.next().getAbsolutePath();
+        folder = folder.substring(0, folder.length() - 6);
+        FileOutputStream resultFile = new FileOutputStream(folder, true);
+        for (File file : fileset) {
+            FileInputStream in = new FileInputStream(file);
+            byte[] buffer = new byte[in.available()];
+            while (in.available() > 0) {
+                in.read(buffer);
+                resultFile.write(buffer);
             }
+            in.close();
         }
-        catch (IOException e) {
-
-        }
-
-        try
-        {
-            fileNameReader.close();
-        }
-        catch (IOException e) {
-
-        }
-
-        if (nameList.size() == 0) {
-            return;
-        }
-
-        Collections.sort(nameList, new filePartComparator());
-
-        filename = nameList.get(0);
-        String outputFileName = filename.substring(0, filename.indexOf(".part"));
-
-        FileWriter fileWriter;
-        try {
-            fileWriter = new FileWriter(outputFileName);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        BufferedWriter writer = new BufferedWriter(fileWriter);
-
-        for (String fileName : nameList) {
-            FileReader filePart;
-            try {
-                filePart = new FileReader(fileName);
-            }
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-                continue;
-            }
-
-            BufferedReader fileReader = new BufferedReader(filePart);
-
-            try
-            {
-                while (fileReader.ready())
-                {
-                    //System.out.println(fileReader.readLine());
-                    writer.write(fileReader.read());
-                    //writer.newLine();
-
-                }
-            }
-            catch (IOException e) {
-
-            }
-
-            try {
-                fileReader.close();
-            }
-            catch (IOException e) {
-
-            }
-
-            try {
-                filePart.close();
-            }
-            catch (IOException e) {
-
-            }
-        }
-
-        try {
-            writer.close();
-        }
-        catch (IOException e) {
-
-        }
-
-        try {
-            fileWriter.close();
-        }
-        catch (IOException e) {
-
-        }
+        resultFile.close();
     }
 }
