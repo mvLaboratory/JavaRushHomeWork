@@ -22,7 +22,43 @@ id productName price quantity
 19847983Куртка для сноубордистов, разм10173.991234
 */
 
+import java.io.*;
+
 public class Solution {
     public static void main(String[] args) throws Exception {
+        if (args.length < 4) {
+            System.out.println("not enough arguments");
+            return;
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String fileName = reader.readLine();
+        reader.close();
+
+        if (args[0].equals("-c")) {
+            BufferedReader dbReader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName),"windows-1251"));
+            long maxID = 0;
+            String dbLine;
+            while ((dbLine = dbReader.readLine()) != null) {
+                String strID = dbLine.substring(0, 8).trim();
+                long id = Long.parseLong(strID);
+                if (id > maxID) maxID = id;
+            }
+            dbReader.close();
+
+            PrintWriter dbFile = new PrintWriter(new BufferedWriter(new FileWriter(fileName, true)));
+
+            String newID = ("" + (++maxID) + "        ").substring(0, 8);
+            StringBuilder productNameBuilder = new StringBuilder();
+            for (int i = 1; i < args.length - 2; i++) {
+                if (i > 1) productNameBuilder.append(" ");
+                productNameBuilder.append(args[i]);
+            }
+            productNameBuilder.append("                              ");
+            String productName = productNameBuilder.toString().substring(0, 30);
+            String price = ("" + args[args.length - 2] + "        ").substring(0, 8);
+            String quantity = ("" + args[args.length - 1] + "    ").substring(0, 4);
+            dbFile.println("" + newID + productName + price + quantity);
+            dbFile.close();
+        }
     }
 }
